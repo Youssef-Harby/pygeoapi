@@ -99,6 +99,15 @@ class BaseProvider:
 
         raise NotImplementedError()
 
+    def get_legend(self, style, format_):
+        """
+        Provide legend image
+
+        :returns: bytes of legend image
+        """
+
+        raise NotImplementedError()
+
     def get_data_path(self, baseurl, urlpath, dirpath):
         """
         Gets directory listing or file description or raw file dump

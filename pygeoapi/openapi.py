@@ -905,7 +905,7 @@ def get_oas_30(cfg):
                 }
             }
 
-        LOGGER.debug('setting up tiles endpoints')
+        LOGGER.debug('setting up edr endpoints')
         edr_extension = filter_providers_by_type(
             collections[k]['providers'], 'edr')
 
@@ -954,6 +954,115 @@ def get_oas_30(cfg):
                             }
                         }
                     }
+
+        LOGGER.debug('setting up maps endpoints')
+        map_extension = filter_providers_by_type(
+            collections[k]['providers'], 'map')
+
+        if map_extension:
+            mp = load_plugin('provider', map_extension)
+
+            map_f = deepcopy(oas['components']['parameters']['f'])
+            print("MAP_F", map_f)
+            map_f['schema']['enum'] = [map_extension['format']['name']]
+            map_f['schema']['default'] = map_extension['format']['name']
+
+            pth = '/collections/{}/map'.format(k)
+            paths[pth] = {
+                'get': {
+                    'summary': 'Get map',
+                    'description': '{} map'.format(v['description']),
+                    'tags': [k],
+                    'operationId': 'getMap',
+                    'parameters': [
+                        {'$ref': '{}#/components/parameters/bbox'.format(OPENAPI_YAML['oapif'])},  # noqa
+                        map_f
+                    ],
+                    'responses': {
+                        '200': {
+                            'description': 'Response',
+                            'content': {
+                                'application/json': {}
+                            }
+                        },
+                        '400': {'$ref': '{}#/components/responses/InvalidParameter'.format(OPENAPI_YAML['oapif'])},  # noqa
+                        '500': {'$ref': '{}#/components/responses/ServerError'.format(OPENAPI_YAML['oapif'])}  # noqa
+                    }
+                }
+            }
+            if mp.time_field is not None:
+                paths[pth]['get']['parameters'].append(
+                    {'$ref': '{}#/components/parameters/datetime'.format(OPENAPI_YAML['oapif'])})  # noqa
+
+            pth = '/collections/{}/map/metadata'.format(k)
+            paths[pth] = {
+                'get': {
+                    'summary': 'Get map metadata',
+                    'description': '{} map metadata'.format(v['description']),
+                    'tags': [k],
+                    'operationId': 'getMapMetadata',
+                    'parameters': [
+                        {'$ref': '#/components/parameters/f'}
+                    ],
+                    'responses': {
+                        '200': {
+                            'description': 'Response',
+                            'content': {
+                                'application/json': {}
+                            }
+                        },
+                        '400': {'$ref': '{}#/components/responses/InvalidParameter'.format(OPENAPI_YAML['oapif'])},  # noqa
+                        '500': {'$ref': '{}#/components/responses/ServerError'.format(OPENAPI_YAML['oapif'])}  # noqa
+                    }
+                }
+            }
+
+            pth = '/collections/{}/styles'.format(k)
+            paths[pth] = {
+                'get': {
+                    'summary': 'List styles',
+                    'description': '{} styles'.format(v['description']),
+                    'tags': [k],
+                    'operationId': 'listStyles',
+                    'parameters': [
+                        {'$ref': '#/components/parameters/f'}
+                    ],
+                    'responses': {
+                        '200': {
+                            'description': 'Response',
+                            'content': {
+                                'application/json': {}
+                            }
+                        },
+                        '400': {'$ref': '{}#/components/responses/InvalidParameter'.format(OPENAPI_YAML['oapif'])},  # noqa
+                        '500': {'$ref': '{}#/components/responses/ServerError'.format(OPENAPI_YAML['oapif'])}  # noqa
+                    }
+                }
+            }
+
+            for s in mp.styles:
+                pth = '/collections/{}/styles/{}'.format(k, s)
+                paths[pth] = {
+                    'get': {
+                        'summary': 'List style',
+                        'description': '{} style {}'.format(v['description'], s),  # noqa
+                        'tags': [k],
+                        'operationId': 'listStyle',
+                        'parameters': [
+                            {'$ref': '#/components/parameters/f'}
+                        ],
+                        'responses': {
+                            '200': {
+                                'description': 'Response',
+                                'content': {
+                                    'application/json': {}
+                                }
+                            },
+                            '400': {'$ref': '{}#/components/responses/InvalidParameter'.format(OPENAPI_YAML['oapif'])},  # noqa
+                            '500': {'$ref': '{}#/components/responses/ServerError'.format(OPENAPI_YAML['oapif'])}  # noqa
+                        }
+                    }
+                }
 
     LOGGER.debug('setting up STAC')
     stac_collections = filter_dict_by_key_value(cfg['resources'],

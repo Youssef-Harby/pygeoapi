@@ -28,7 +28,7 @@
 #
 # =================================================================
 
-""" Flask module providing the route paths to the api"""
+"""Flask module providing the route paths to the api"""
 
 import os
 
@@ -298,6 +298,100 @@ def get_collection_tiles_data(collection_id=None, tileMatrixSetId=None,
     """
     return get_response(api_.get_collection_tiles_data(
         request, collection_id, tileMatrixSetId, tileMatrix, tileRow, tileCol))
+
+
+@BLUEPRINT.route('/collections/<collection_id>/styles')
+@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>')
+def collection_styles(collection_id, style_id=None):
+    """
+    OGC API - Styles description endpoint
+
+    :param collection_id: collection identifier
+    :param style_id: style identifier
+
+    :returns: HTTP response
+    """
+
+    headers, status_code, content = api_.get_collection_styles(
+        request, collection_id, style_id)
+
+    response = make_response(content, status_code)
+
+    if headers:
+        response.headers = headers
+
+    return response
+
+
+@BLUEPRINT.route('/collections/<collection_id>/map/metadata')
+@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map/metadata')
+@BLUEPRINT.route('/collections/<collection_id>/styles/map/metadata')
+@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map/metadata')
+def collection_map_metadata(collection_id, style_id=None):
+    """
+    OGC API - Maps map description endpoint
+
+    :param collection_id: collection identifier
+    :param style_id: style identifier
+
+    :returns: HTTP response
+    """
+
+    headers, status_code, content = api_.get_collection_map_metadata(
+        request, collection_id, style_id)
+
+    response = make_response(content, status_code)
+
+    if headers:
+        response.headers = headers
+
+    return response
+
+
+@BLUEPRINT.route('/collections/<collection_id>/map')
+@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map')
+def collection_map(collection_id, style_id=None):
+    """
+    OGC API - Maps map render endpoint
+
+    :param collection_id: collection identifier
+    :param style_id: style identifier
+
+    :returns: HTTP response
+    """
+
+    headers, status_code, content = api_.get_collection_map(
+        request, collection_id, style_id)
+
+    response = make_response(content, status_code)
+
+    if headers:
+        response.headers = headers
+
+    return response
+
+
+@BLUEPRINT.route('/collections/<collection_id>/map/legend')
+@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map/legend')
+def collection_map_legend(collection_id, style_id=None):
+    """
+    OGC API - Maps map legend render endpoint
+
+    :param collection_id: collection identifier
+    :param style_id: style identifier
+
+    :returns: HTTP response
+    """
+
+    headers, status_code, content = api_.get_collection_map_legend(
+        request, collection_id, style_id)
+
+    response = make_response(content, status_code)
+
+    if headers:
+        response.headers = headers
+
+    return response
 
 
 @BLUEPRINT.route('/processes')

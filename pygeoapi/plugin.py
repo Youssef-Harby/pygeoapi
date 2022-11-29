@@ -50,6 +50,7 @@ PLUGINS = {
         'Hateoas': 'pygeoapi.provider.hateoas.HateoasProvider',
         'rasterio': 'pygeoapi.provider.rasterio_.RasterioProvider',
         'xarray': 'pygeoapi.provider.xarray_.XarrayProvider',
+        'MapServerMapfile': 'pygeoapi.provider.mapserver.MapServerMapfileProvider',  # noqa
         'MVT': 'pygeoapi.provider.mvt.MVTProvider',
         'TinyDBCatalogue': 'pygeoapi.provider.tinydb_.TinyDBCatalogueProvider',
         'SensorThings': 'pygeoapi.provider.sensorthings.SensorThingsProvider',

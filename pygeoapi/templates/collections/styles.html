@@ -1,0 +1,34 @@
+{% extends "_base.html" %}
+{% block title %}{{ super() }} {{ data['title'] }} {% endblock %}
+{% block crumbs %}{{ super() }}
+/ <a href="../../../collections">Collections</a>
+/ <a href="../{{ data['id'] }}">{{ data['title'] | truncate( 25 ) }}</a>
+/ <a href="../{{ data['id'] }}styles">Styles</a>
+{% endblock %}
+{% block body %}
+    <section id="collection">
+      <h1>{{ data['title'] }}</h1>
+      <p>{{ data['description'] }}</p>
+      <p>
+        {% for kw in data['keywords'] %}
+          <mark class="tag">{{ kw }}</mark>
+        {% endfor %}
+      </p>
+      <h3>Styles</h3>
+      <table>
+        <tr>
+          <th>Name</td>
+          <th>Legend</td>
+          <th>Map</td>
+        </tr>
+        {% for style in data['styles'] %}
+        <tr>
+          <td><a title="{{ style['id'] }}" href="{{ config['server']['url'] }}/collections/{{ data['collection_id'] }}/styles/{{ style['id'] }}">{{ style['id'] }}</a></td>
+          <td><a title="{{ style['id'] }}" href="{{ config['server']['url'] }}/collections/{{ data['collection_id'] }}/styles/{{ style['id'] }}/map/legend"><img src="{{ config['server']['url'] }}/collections/{{ data['collection_id'] }}/styles/{{ style['id'] }}/map/legend" alt="{{ style['id'] }}" title="{{ style['id'] }}"/></td>
+          <td><a title="{{ style['id'] }}" href="{{ config['server']['url'] }}/collections/{{ data['collection_id'] }}/styles/{{ style['id'] }}/map"><img src="{{ config['server']['url'] }}/collections/{{ data['collection_id'] }}/styles/{{ style['id'] }}/map" alt="{{ style['id'] }}" title="{{ style['id'] }}" width="400"/></a></td>
+        </tr>
+        {% endfor %}
+      </ul>
+      </table>
+    </section>
+{% endblock %}

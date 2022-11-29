@@ -1,0 +1,24 @@
+{% extends "_base.html" %}
+{% block title %}{{ super() }} {{ data['title'] }} {% endblock %}
+{% block crumbs %}{{ super() }}
+/ <a href="../../../collections">Collections</a>
+/ <a href="..">{{ data['title'] | truncate( 25 ) }}</a>
+/ <a href="../styles">Styles</a>
+/ <a href="../styles/{{ data['id'] }}">{{ data['id'] }}</a>
+{% endblock %}
+{% block body %}
+    <section id="collection">
+      <h1>{{ data['title'] }}</h1>
+      <h3>Style</h3>
+      <p>Legend
+        {% for link in data['links'] | selectattr("rel", "equalto", 'legend') | list %}
+        <a title="{{ link['title'] }} legend" href="{{ link['href'] }}"><img src="{{ link['href'] }}" alt="{{ data['id'] }} legend" title="{{ link['title'] }}"/></a>
+        {% endfor %}
+      </p>
+      <p>Map
+        {% for link in data['links'] | selectattr("rel", "equalto", 'http://www.opengis.net/def/rel/ogc/1.0/map') | list %}
+        <a title="{{ link['title'] }} map" href="{{ link['href'] }}"><img src="{{ link['href'] }}" alt="{{ data['id'] }} map" title="{{ link['title'] }}"/></a>
+        {% endfor %}
+      </p>
+    </section>
+{% endblock %}
