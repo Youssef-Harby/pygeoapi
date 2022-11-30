@@ -39,7 +39,7 @@ server:
         # First language is the default language
         - en-US
         - fr-CA
-    # cors: true
+    cors: true
     pretty_print: true
     limit: 10
     # templates:
@@ -175,12 +175,84 @@ resources:
               id_field: id
               title_field: name
             - type: map
-              name: MapServerMapfile
-              #data: tests/data/ne_110m_lakes.geojson
-              data: /Users/tomkralidis/Dev/mapserver/MapServer/msautotest/wxs/tomk_workshop.map
+              name: MapScript
+              data: /Users/tomkralidis/Dev/mapserver/mapserver/msautotest/wxs/data/rivers.shp
+              options:
+                  sld: ./foo.sld
+              format:
+                    name: png
+                    mimetype: image/png
+
+    rivers:
+        type: collection
+        title:
+            en: Rivers
+            fr: Rivières
+        description:
+            en: Rivers
+            fr: Rivières
+        keywords:
+            en:
+                - rivers
+                - water bodies
+            fr:
+                - rivières
+                - plans d'eau
+        links:
+            - type: text/html
+              rel: canonical
+              title: information
+              href: https://github.com/MapServer/MapServer/tree/main/msautotest/wxs/data
+              hreflang: en-US
+        extents:
+            spatial:
+                bbox: [-180,-90,180,90]
+                crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
+        providers:
+            - type: map
+              name: MapScript
+              data: test-oamaps-data/rivers.shp
               options:
                   layer_name: rivers
-                  #sld: ./foo.sld
+                  sld: test-oamaps-data/foo.sld
+              format:
+                    name: png
+                    mimetype: image/png
+
+    euroglobalmap:
+        type: collection
+        title:
+            en: EuroGlobalMap
+            fr: EuroGlobalMap
+        description:
+            en: EuroGlobalMap
+            fr: EuroGlobalMap
+        keywords:
+            en:
+                - EuroGlobalMap
+                - MapsForEurope
+            fr:
+                - EuroGlobalMap
+                - MapsForEurope
+        links:
+            - type: text/html
+              rel: canonical
+              title: information
+              href: https://www.mapsforeurope.org
+              hreflang: en-US
+        extents:
+            spatial:
+                bbox: [-180,-80,180,85]
+                crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
+        providers:
+            - type: map
+              name: WMSFacade
+              data: https://www.mapsforeurope.org/maps/wms?token=ImV1cm9nZW9ncmFwaGljc19yZWdpc3RlcmVkXzM3MjIi.FmeBBQ.O6mrj1ubZRr7DDG8436aaGtXiPY
+              #data: https://geo.weather.gc.ca/geomet
+              options:
+                  layer: egm
+                  #layer: GDPS.ETA_TT
+                  style: default
               format:
                     name: png
                     mimetype: image/png
