@@ -49,9 +49,10 @@ IMAGE_FORMATS = {
     'jpeg': 'GD/JPEG'
 }
 
-t3857 = "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs"
 
 class MapScriptProvider(BaseProvider):
+    """MapScript map provider (https://mapserver.org/mapscript)"""
+
     def __init__(self, provider_def):
         """
         Initialize object
@@ -68,13 +69,16 @@ class MapScriptProvider(BaseProvider):
         self._classes = []
         self.default_format = 'png'
 
+        LOGGER.debug('MapScript version: {}'.format(mapscript.MS_VERSION))
+
         try:
+            LOGGER.debug('Creating new mapObj and layerObj')
             self._map = mapscript.mapObj()
+            self.max_width = self.max_height = 4096
             self._layer = mapscript.layerObj(self._map)
             self._layer.status = mapscript.MS_ON
             self._layer.data = self.data
             self._layer.sizeunits = mapscript.MS_DD
-            print("PROJECTION", self._layer.getProjection())
 
             try:
                 self.crs = int(self.options['projection'])
@@ -82,6 +86,8 @@ class MapScriptProvider(BaseProvider):
                 self.crs = 4326
 
             self._layer.setProjection(self._get_proj4_string(self.crs))
+
+            LOGGER.debug('Layer projection: {}'.format, self._layer.getProjection())  # noqa
 
             if 'sld' in self.options:
                 LOGGER.debug('Setting SLD')
@@ -91,8 +97,6 @@ class MapScriptProvider(BaseProvider):
         except MapServerError as err:
             LOGGER.warning(err)
             raise ProviderConnectionError('Cannot connect to map service')
-
-        self.max_width = self.max_height = self._map.maxsize
 
     def query(self, style=None, bbox=[], width=500, height=300, crs='CRS84',
               datetime_=None, format_='png'):
@@ -116,12 +120,11 @@ class MapScriptProvider(BaseProvider):
             LOGGER.error('Bad output format: {}'.format(image_obj_format))
             raise ProviderQueryError('Bad image format')
 
-        LOGGER.debug('Setting coordinate reference system')
+        LOGGER.debug('Setting output map CRS')
         try:
             if crs not in ['CRS84', 4326]:
-                LOGGER.debug('Reprojecting')
+                LOGGER.debug('Reprojecting coordinates')
                 prj_dst_text = self._get_proj4_string(int(crs.split("/")[-1]))
-                prj_dst_text = t3857
 
                 prj_src = mapscript.projectionObj(self._layer.getProjection())
                 prj_dst = mapscript.projectionObj(prj_dst_text)
@@ -151,17 +154,20 @@ class MapScriptProvider(BaseProvider):
         self._map.setProjection(map_crs)
         self._map.setConfigOption('MS_NONSQUARE', 'yes')
 
-        print("BBOX", bbox)
-        #self._layer.setExtent(*bbox)
         img = self._map.draw()
 
-        print("MAPSCRIPT VERSION", mapscript.MS_VERSION)
-
-        print(self._map.convertToString())
+        LOGGER.debug('Mapfile: {}'.format(self._map.convertToString()))
         return img.getBytes()
 
+    def _epsg2projstring(self, epsg_code):
+        """
+        Helper function to derive a proj string from an EPSG code
 
-    def _get_proj4_string(self, epsg_code):
+        :param epsg_code: `int` of EPSG code
+
+        :returns: `str` of PROJ string/syntax
+        """
+
         prj = osr.SpatialReference()
         prj.ImportFromEPSG(epsg_code)
 

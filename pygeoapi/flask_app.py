@@ -323,31 +323,6 @@ def collection_styles(collection_id, style_id=None):
     return response
 
 
-@BLUEPRINT.route('/collections/<collection_id>/map/metadata')
-@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map/metadata')
-@BLUEPRINT.route('/collections/<collection_id>/styles/map/metadata')
-@BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map/metadata')
-def collection_map_metadata(collection_id, style_id=None):
-    """
-    OGC API - Maps map description endpoint
-
-    :param collection_id: collection identifier
-    :param style_id: style identifier
-
-    :returns: HTTP response
-    """
-
-    headers, status_code, content = api_.get_collection_map_metadata(
-        request, collection_id, style_id)
-
-    response = make_response(content, status_code)
-
-    if headers:
-        response.headers = headers
-
-    return response
-
-
 @BLUEPRINT.route('/collections/<collection_id>/map')
 @BLUEPRINT.route('/collections/<collection_id>/styles/<style_id>/map')
 def collection_map(collection_id, style_id=None):
