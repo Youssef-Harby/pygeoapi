@@ -3051,9 +3051,19 @@ class API:
 
         query_args['format_'] = request.params.get('f', 'png')
         query_args['style'] = style
-        query_args['width'] = int(request.params.get('width', 500))
-        query_args['height'] = int(request.params.get('height', 300))
         query_args['crs'] = request.params.get('crs', 4326)
+
+        try:
+            query_args['width'] = int(request.params.get('width', 500))
+            query_args['height'] = int(request.params.get('height', 300))
+        except ValueError:
+            exception = {
+                'code': 'InvalidParameterValue',
+                'description': 'invalid width/height/crs'
+            }
+            LOGGER.error(exception)
+            return headers, 400, to_json(exception, self.pretty_print)
+
 
         LOGGER.debug('Processing bbox parameter')
         try:
@@ -3086,6 +3096,7 @@ class API:
                 'description': 'query error: {}'.format(err),
             }
             LOGGER.error(exception)
+            headers['Content-type'] = 'application/json'
             return headers, 400, to_json(exception, self.pretty_print)
         except ProviderNoDataError:
             exception = {
@@ -3093,6 +3104,7 @@ class API:
                 'description': 'No data found'
             }
             LOGGER.debug(exception)
+            headers['Content-type'] = 'application/json'
             return headers, 204, to_json(exception, self.pretty_print)
         except ProviderQueryError:
             exception = {
@@ -3100,11 +3112,16 @@ class API:
                 'description': 'query error (check logs)'
             }
             LOGGER.error(exception)
+            headers['Content-type'] = 'application/json'
             return headers, 500, to_json(exception, self.pretty_print)
 
         mt = collection_def['format']['name']
 
+        print("RE FORMAT", format_)
         if format_ == mt:
+            headers['Content-Type'] = collection_def['format']['mimetype']
+            return headers, 200, data
+        elif format_ in [None, 'html']:
             headers['Content-Type'] = collection_def['format']['mimetype']
             return headers, 200, data
         else:

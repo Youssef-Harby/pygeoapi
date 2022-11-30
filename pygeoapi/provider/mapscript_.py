@@ -49,6 +49,7 @@ IMAGE_FORMATS = {
     'jpeg': 'GD/JPEG'
 }
 
+t3857 = "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs"
 
 class MapScriptProvider(BaseProvider):
     def __init__(self, provider_def):
@@ -72,6 +73,7 @@ class MapScriptProvider(BaseProvider):
             self._layer = mapscript.layerObj(self._map)
             self._layer.status = mapscript.MS_ON
             self._layer.data = self.data
+            self._layer.sizeunits = mapscript.MS_DD
             print("PROJECTION", self._layer.getProjection())
 
             try:
@@ -119,6 +121,7 @@ class MapScriptProvider(BaseProvider):
             if crs not in ['CRS84', 4326]:
                 LOGGER.debug('Reprojecting')
                 prj_dst_text = self._get_proj4_string(int(crs.split("/")[-1]))
+                prj_dst_text = t3857
 
                 prj_src = mapscript.projectionObj(self._layer.getProjection())
                 prj_dst = mapscript.projectionObj(prj_dst_text)
@@ -152,7 +155,11 @@ class MapScriptProvider(BaseProvider):
         #self._layer.setExtent(*bbox)
         img = self._map.draw()
 
+        print("MAPSCRIPT VERSION", mapscript.MS_VERSION)
+
+        print(self._map.convertToString())
         return img.getBytes()
+
 
     def _get_proj4_string(self, epsg_code):
         prj = osr.SpatialReference()
