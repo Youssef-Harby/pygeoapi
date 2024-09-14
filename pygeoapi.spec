@@ -14,7 +14,7 @@ if platform.system() == 'Windows':
 else:
     GDAL_DATA = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'share' / 'gdal'
     PROJ_LIB = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'share' / 'proj'
-    PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / 'site-packages' / 'pygeofilter'/ 'parsers'
+    PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / 'python3.11' / 'site-packages' / 'pygeofilter'/ 'parsers'
 
 a = Analysis(
     ['pygeoapi/__init__.py'],
