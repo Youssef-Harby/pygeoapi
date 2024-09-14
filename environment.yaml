@@ -11,3 +11,4 @@ dependencies:
   - conda-forge::Pillow==10.4.0
   - pip:
       - -e ./
+      - pygeofilter==0.2.4
