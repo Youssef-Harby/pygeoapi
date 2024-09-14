@@ -1,0 +1,46 @@
+name: Build Binary
+
+on:
+  push:
+    branches: [feat-os-build]
+  pull_request:
+    branches: [main]
+
+env:
+    MICROMAMBA_ENV_NAME: pygeoapi
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Micromamba
+        uses: mamba-org/setup-micromamba@v1.9.0
+        with:
+          micromamba-version: "1.5.8-0"
+          environment-file: environment.yaml
+          init-shell: bash
+          cache-environment: true
+          post-cleanup: all
+
+      - name: Upgrade Dependencies
+        shell: bash
+        run: |
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller
+
+      - name: Build the Package
+        shell: bash
+        run: |
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pyinstaller pygeoapi.spec
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: binary-${{ matrix.os }}
+          path: dist/  # Adjust this path if necessary

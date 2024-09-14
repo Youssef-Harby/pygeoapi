@@ -1,0 +1,13 @@
+name: pygeoapi
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - conda-forge::python==3.11.7
+  - conda-forge::pip==24.2
+  - conda-forge::gdal==3.9.2
+  - conda-forge::libgdal-arrow-parquet==3.9.2
+  - conda-forge::pyinstaller==6.10.0
+  - conda-forge::Pillow==10.4.0
+  - pip:
+      - -e ./

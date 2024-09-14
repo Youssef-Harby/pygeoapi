@@ -110,3 +110,6 @@ def serve(ctx, server):
 
 cli.add_command(config)
 cli.add_command(openapi)
+
+if __name__ == "__main__":
+    cli()
