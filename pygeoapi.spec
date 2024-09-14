@@ -17,7 +17,7 @@ else:
     PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / 'site-packages' / 'pygeofilter'/ 'parsers'
 
 a = Analysis(
-    ['pygeoapi\__init__.py'],
+    ['pygeoapi/__init__.py'],
     pathex=[],
     binaries=[],
     datas=[
