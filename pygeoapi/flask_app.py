@@ -534,6 +534,24 @@ def styles_api_my_function():
     return execute_from_flask(styles_api.get_styles, request)
 
 
+@BLUEPRINT.route('/styles/<style_id>', methods=['GET'])
+def get_style(style_id):
+    """
+    Get Style by ID endpoint
+    :returns: HTTP response
+    """
+    return execute_from_flask(styles_api.get_style, request, style_id)
+
+
+@BLUEPRINT.route('/styles/<style_id>/metadata', methods=['GET'])
+def get_style_metadata(style_id):
+    """
+    Get Style metadata endpoint
+    :returns: HTTP response
+    """
+    return execute_from_flask(styles_api.get_style_metadata, request, style_id)
+
+
 @BLUEPRINT.route('/stac')
 def stac_catalog_root():
     """
