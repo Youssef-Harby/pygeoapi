@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-    MICROMAMBA_ENV_NAME: pygeoapi
+  MICROMAMBA_ENV_NAME: pygeoapi
 
 jobs:
   build:
@@ -21,13 +21,16 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Micromamba
-        uses: mamba-org/setup-micromamba@v1.9.0
+        uses: mamba-org/setup-micromamba@v2.0.1
         with:
-          micromamba-version: "1.5.8-0"
+          micromamba-version: "2.0.2-2"
           environment-file: environment.yaml
           init-shell: bash
           cache-environment: true
           post-cleanup: all
+          log-level: debug
+        env:
+          ACTIONS_STEP_DEBUG: true
 
       - name: Upgrade Dependencies
         shell: bash
@@ -43,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v4.4.0
         with:
           name: binary-${{ matrix.os }}
-          path: dist/  # Adjust this path if necessary
+          path: dist/ # Adjust this path if necessary
