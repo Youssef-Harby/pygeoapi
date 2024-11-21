@@ -11,6 +11,7 @@ env:
 
 jobs:
   build:
+    timeout-minutes: 30
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -24,12 +25,13 @@ jobs:
         uses: mamba-org/setup-micromamba@v2.0.1
         with:
           micromamba-version: "2.0.2-2"
+          micromamba-binary-path: /home/runner/micromamba-bin-versioned/micromamba
           environment-file: environment.yaml
           environment-name: ${{ env.MICROMAMBA_ENV_NAME }}
           init-shell: bash
           cache-environment: false
           post-cleanup: all
-          log-level: trace
+          log-level: info
         env:
           ACTIONS_STEP_DEBUG: true
 
