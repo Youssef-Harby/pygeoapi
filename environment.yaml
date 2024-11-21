@@ -3,14 +3,20 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - conda-forge::python==3.11.7
+  - conda-forge::python==3.11.10
   - conda-forge::pip==24.3.1
-  - conda-forge::gdal==3.9.3
-  - conda-forge::libgdal-arrow-parquet==3.9.3
+  - conda-forge::gdal==3.10.0
+  - conda-forge::libgdal-arrow-parquet==3.10.0
+  - conda-forge::libgdal-grib==3.10.0
+  - conda-forge::libgdal-hdf4==3.10.0
+  - conda-forge::libgdal-hdf5==3.10.0
+  - conda-forge::libgdal-netcdf==3.10.0
+  - conda-forge::libgdal-jp2openjpeg==3.10.0
   - conda-forge::pyinstaller==6.11.1
   - conda-forge::Pillow==11.0.0
+  - conda-forge::rasterio==1.4.2
   - pip:
-      - -e ./
-      - pygeofilter==0.2.4
       - -r requirements-admin.txt
+      - pygeofilter==0.2.4
       - flask-cors==5.0.0
+      - ./
