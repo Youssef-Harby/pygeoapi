@@ -26,9 +26,9 @@ jobs:
           micromamba-version: "2.0.2-2"
           environment-file: environment.yaml
           init-shell: bash
-          cache-environment: true
+          cache-environment: false
           post-cleanup: all
-          log-level: debug
+          log-level: trace
         env:
           ACTIONS_STEP_DEBUG: true
 
