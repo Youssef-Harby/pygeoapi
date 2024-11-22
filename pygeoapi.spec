@@ -10,11 +10,13 @@ env_name = 'pygeoapi'
 if platform.system() == 'Windows':
     GDAL_DATA = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'share' / 'gdal'
     PROJ_LIB = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'share' / 'proj'
+    GDAL_PLUGINS = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'bin' / 'gdalplugins'
     PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Lib' / 'site-packages' / 'pygeofilter' / 'parsers'
 else:
     GDAL_DATA = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'share' / 'gdal'
     PROJ_LIB = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'share' / 'proj'
-    PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / 'python3.11' / 'site-packages' / 'pygeofilter'/ 'parsers'
+    GDAL_PLUGINS = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / 'gdalplugins'
+    PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / 'python3.11' / 'site-packages' / 'pygeofilter' / 'parsers'
 
 a = Analysis(
     ['pygeoapi/__init__.py'],
@@ -24,7 +26,9 @@ a = Analysis(
         ('pygeoapi/', 'pygeoapi'),
         (PYGEOFILTER / 'ecql' / 'grammar.lark', 'pygeofilter/parsers/ecql'),
         (PYGEOFILTER / 'wkt.lark', 'pygeofilter/parsers'),
-        (PYGEOFILTER /'iso8601.lark', 'pygeofilter/parsers')
+        (PYGEOFILTER /'iso8601.lark', 'pygeofilter/parsers'),
+        (str(GDAL_DATA), 'GDAL_DATA'),
+        (str(PROJ_LIB), 'PROJ_LIB')
         ],
     hiddenimports=[
         'rasterio',
@@ -62,7 +66,7 @@ a = Analysis(
     ],
     hookspath=[],
     hooksconfig={},
-    runtime_hooks=[],
+    runtime_hooks=['set_gdal_proj_env.py'],
     excludes=[],
     noarchive=False,
     optimize=0,
