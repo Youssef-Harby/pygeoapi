@@ -29,7 +29,7 @@ jobs:
           environment-file: environment.yaml
           environment-name: ${{ env.MICROMAMBA_ENV_NAME }}
           init-shell: bash
-          cache-environment: false
+          cache-environment: true
           post-cleanup: all
           log-level: info
         env:
@@ -38,12 +38,12 @@ jobs:
       - name: Upgrade Dependencies
         shell: bash
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller rasterio
 
       - name: Build the Package
         shell: bash
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pyinstaller pygeoapi.spec
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pyinstaller pygeoapi.spec --clean
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.4.0
