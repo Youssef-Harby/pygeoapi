@@ -8,8 +8,8 @@ on:
 
 env:
   MICROMAMBA_ENV_NAME: pygeoapi
-  GDAL_VERSION: 3.9.2
-  RASTERIO_VERSION: 1.3.11
+  GDAL_VERSION: 3.9.3
+  RASTERIO_VERSION: 1.4.2
 
 jobs:
   build:
@@ -40,12 +40,7 @@ jobs:
       - name: Upgrade Dependencies
         shell: bash
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller
-
-      - name: Downgrade rasterio version
-        shell: bash
-        run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install rasterio==${{ env.RASTERIO_VERSION }} --force-reinstall
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --force-reinstall numpy pyinstaller rasterio==${{ env.RASTERIO_VERSION }}
 
       - name: Build the Package
         shell: bash
