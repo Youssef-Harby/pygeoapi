@@ -50,7 +50,7 @@ jobs:
       - name: Install rasterio from conda-forge
         shell: bash
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} conda install -c conda-forge rasterio==${{ env.RASTERIO_VERSION }}
+          micromamba install -n ${{ env.MICROMAMBA_ENV_NAME }} -c conda-forge rasterio==${{ env.RASTERIO_VERSION }}
 
       - name: Build the Package
         shell: bash
