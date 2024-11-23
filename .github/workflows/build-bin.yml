@@ -40,7 +40,15 @@ jobs:
       - name: Upgrade Dependencies
         shell: bash
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --force-reinstall numpy pyinstaller rasterio==${{ env.RASTERIO_VERSION }}
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --force-reinstall numpy pyinstaller
+
+      - name: Build Rasterio for macOS and Ubuntu
+        if: matrix.os != 'windows-latest'
+        shell: bash
+        run: |
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip uninstall -y rasterio
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip cache purge
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --no-binary rasterio rasterio==${{ env.RASTERIO_VERSION }}
 
       - name: Build the Package
         shell: bash
