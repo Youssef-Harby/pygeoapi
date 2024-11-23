@@ -8,6 +8,7 @@ on:
 
 env:
   MICROMAMBA_ENV_NAME: pygeoapi
+  GDAL_VERSION: 3.10.0
 
 jobs:
   build:
@@ -39,6 +40,11 @@ jobs:
         shell: bash
         run: |
           micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller
+
+      - name: Build rasterio
+        shell: bash
+        run: |
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --no-binary rasterio --no-deps --force-reinstall rasterio
 
       - name: Build the Package
         shell: bash
