@@ -14,7 +14,7 @@ dependencies:
   - conda-forge::libgdal-jp2openjpeg==3.10.0
   - conda-forge::pyinstaller==6.11.1
   - conda-forge::Pillow==11.0.0
-  - conda-forge::libgdal==3.10.0
+  - conda-forge::setuptools==65.3.0
   - pip:
       - -r requirements-admin.txt
       - pygeofilter==0.2.4
