@@ -13,7 +13,7 @@ if platform.system() == 'Windows':
     pathex = [str(MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Lib' / 'site-packages')]
     GDAL_DATA = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'share' / 'gdal'
     PROJ_LIB = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'share' / 'proj'
-    GDAL_PLUGINS = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'bin' / 'gdalplugins'
+    GDAL_PLUGINS = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Library' / 'lib' / 'gdalplugins'
     PYGEOFILTER = MAMBA_ROOT_PREFIX / 'envs' / env_name / 'Lib' / 'site-packages' / 'pygeofilter' / 'parsers'
 else:
     pathex = [str(MAMBA_ROOT_PREFIX / 'envs' / env_name / 'lib' / f'python{platform.python_version_tuple()[0]}.{platform.python_version_tuple()[1]}' / 'site-packages')]
