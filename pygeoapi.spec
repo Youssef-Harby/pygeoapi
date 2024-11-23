@@ -48,6 +48,9 @@ a = Analysis(
         (PYGEOFILTER / 'iso8601.lark', 'pygeofilter/parsers'),
         *gdal_data_files,
         *proj_data_files,
+        (str(GDAL_DATA), 'GDAL_DATA'),
+        (str(PROJ_LIB), 'PROJ_LIB'),
+        (str(GDAL_PLUGINS), 'GDAL_PLUGINS'),
     ],
     hiddenimports=[
         *pygeoapi_submodules,  # Include all pygeoapi submodules
