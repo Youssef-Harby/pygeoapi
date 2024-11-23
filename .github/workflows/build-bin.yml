@@ -8,7 +8,8 @@ on:
 
 env:
   MICROMAMBA_ENV_NAME: pygeoapi
-  GDAL_VERSION: 3.10.0
+  GDAL_VERSION: 3.9.3
+  RASTERIO_VERSION: 1.4.2
 
 jobs:
   build:
@@ -41,28 +42,15 @@ jobs:
       #   run: |
       #     micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller
 
-      - name: Build rasterio on Windows
-        if: ${{ runner.os == 'Windows' }}
-        shell: pwsh
-        env:
-          MAMBA_ENV_PATH: ${{ env.MAMBA_ROOT_PREFIX }}\envs\${{ env.MICROMAMBA_ENV_NAME }}
-        run: |
-          # Set GDAL environment variables
-          $env:GDAL_VERSION = '${{ env.GDAL_VERSION }}'
-          $env:GDAL_INCLUDE_PATH = "$env:MAMBA_ENV_PATH\Library\include"
-          $env:GDAL_LIBRARY_PATH = "$env:MAMBA_ENV_PATH\Library\lib\gdal_i.lib"
-
-          # Update PATH to include GDAL binaries
-          $env:PATH = "$env:MAMBA_ENV_PATH\Library\bin;$env:PATH"
-
-          # Build rasterio from source
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --no-binary rasterio --force-reinstall rasterio
-
-      - name: Build rasterio on Linux and macOS
-        if: ${{ runner.os != 'Windows' }}
+      - name: Uninstall rasterio pip version
         shell: bash
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --no-binary rasterio --force-reinstall rasterio
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip uninstall -y rasterio
+
+      - name: Install rasterio from conda-forge
+        shell: bash
+        run: |
+          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} conda install -c conda-forge rasterio==${{ env.RASTERIO_VERSION }}
 
       - name: Build the Package
         shell: bash
