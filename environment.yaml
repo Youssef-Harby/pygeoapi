@@ -5,13 +5,13 @@ channels:
 dependencies:
   - conda-forge::python==3.11.10
   - conda-forge::pip==24.3.1
-  - conda-forge::gdal==3.9.3
-  - conda-forge::libgdal-arrow-parquet==3.9.3
-  - conda-forge::libgdal-grib==3.9.3
-  - conda-forge::libgdal-hdf4==3.9.3
-  - conda-forge::libgdal-hdf5==3.9.3
-  - conda-forge::libgdal-netcdf==3.9.3
-  - conda-forge::libgdal-jp2openjpeg==3.9.3
+  - conda-forge::gdal==3.9.2
+  - conda-forge::libgdal-arrow-parquet==3.9.2
+  - conda-forge::libgdal-grib==3.9.2
+  - conda-forge::libgdal-hdf4==3.9.2
+  - conda-forge::libgdal-hdf5==3.9.2
+  - conda-forge::libgdal-netcdf==3.9.2
+  - conda-forge::libgdal-jp2openjpeg==3.9.2
   - conda-forge::pyinstaller==6.11.1
   - conda-forge::Pillow==11.0.0
   - pip:
