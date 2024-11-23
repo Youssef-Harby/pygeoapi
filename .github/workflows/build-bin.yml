@@ -26,7 +26,6 @@ jobs:
         uses: mamba-org/setup-micromamba@v1.11.0
         with:
           micromamba-version: "1.5.10-0"
-          # micromamba-binary-path: ${{ runner.temp }}/bin/micromamba
           environment-file: environment.yaml
           environment-name: ${{ env.MICROMAMBA_ENV_NAME }}
           init-shell: bash
@@ -36,12 +35,27 @@ jobs:
         env:
           ACTIONS_STEP_DEBUG: true
 
-      - name: Upgrade Dependencies
-        shell: bash
+      - name: Setup GDAL and Environment Variables (Windows only)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
         run: |
-          micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --upgrade --no-deps --force-reinstall numpy pyinstaller
+          setx GDAL_DATA "%CONDA_PREFIX%\Library\share\gdal"
+          setx PROJ_LIB "%CONDA_PREFIX%\Library\share\proj"
+          setx GDAL_CONFIG "%CONDA_PREFIX%\Library\bin\gdal-config"
+          setx PATH "%CONDA_PREFIX%\Library\bin;%PATH%"
 
-      - name: Build rasterio
+      - name: Build Rasterio (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          echo [build_ext] > setup.cfg
+          echo include_dirs=%CONDA_PREFIX%\Library\include >> setup.cfg
+          echo libraries=gdal >> setup.cfg
+          echo library_dirs=%CONDA_PREFIX%\Library\lib >> setup.cfg
+          micromamba run -n %MICROMAMBA_ENV_NAME% python -m pip install --no-binary rasterio rasterio
+
+      - name: Build Rasterio (macOS and Ubuntu)
+        if: matrix.os != 'windows-latest'
         shell: bash
         run: |
           micromamba run -n ${{ env.MICROMAMBA_ENV_NAME }} pip install --no-binary rasterio --no-deps --force-reinstall rasterio
