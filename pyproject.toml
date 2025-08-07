@@ -1,0 +1,100 @@
+[project]
+name = "pygeoapi"
+version = "0.22.dev0"
+description = "pygeoapi provides an API to geospatial data"
+authors = [
+    {name = "Tom Kralidis", email = "tomkralidis@gmail.com"}
+]
+maintainers = [
+    {name = "Tom Kralidis", email = "tomkralidis@gmail.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+keywords = ["geospatial", "data", "api"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering :: GIS"
+]
+dependencies = [
+    "babel>=2.17.0",
+    "click>=8.2.1",
+    "filelock>=3.18.0",
+    "flask>=3.1.1",
+    "jinja2>=3.1.6",
+    "jsonschema>=4.25.0",
+    "pydantic>=2.11.7",
+    "pygeofilter>=0.3.1",
+    "pygeoif>=1.5.1",
+    "pyproj>=3.7.1",
+    "python-dateutil>=2.9.0.post0",
+    "pytz>=2025.2",
+    "pyyaml>=6.0.2",
+    "rasterio>=1.4.3",
+    "requests>=2.32.4",
+    "shapely>=2.1.1",
+    "sqlalchemy>=2.0.42",
+    "tinydb>=4.8.2",
+]
+
+[project.urls]
+Homepage = "https://pygeoapi.io"
+
+[project.scripts]
+pygeoapi = "pygeoapi:cli"
+
+[dependency-groups]
+admin = [
+    "filelock>=3.18.0",
+    "gunicorn>=23.0.0",
+    "jsonpatch>=1.33",
+]
+dev = [
+    "coverage>=7.10.2",
+    "flake8>=7.3.0",
+    "flask-cors>=6.0.1",
+    "httpx>=0.28.1",
+    "ndg-httpsclient>=0.5.1",
+    "polyfactory>=2.22.1",
+    "pre-commit>=4.2.0",
+    "pyasn1>=0.6.1",
+    "pyld>=2.0.4",
+    "pyopenssl>=25.1.0",
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-env>=1.1.5",
+    "starlette>=0.47.2",
+    "twine>=6.1.0",
+    "uvicorn[standard]>=0.35.0",
+    "wheel>=0.45.1",
+]
+django = [
+    "django>=5.2.5",
+    "pydantic>=2.11.7",
+]
+docker = [
+    "elasticsearch-dsl<8",
+    "flask>=2.2.0",
+    "flask-cors>=6.0.1",
+    "geoalchemy2>=0.18.0",
+    "pygeofilter[backend-sqlalchemy]>=0.3.1",
+    "pygeoif>=1.5.1",
+    "pygeometa>=0.17.0",
+    "s3fs<=2023.6.0",
+    "sodapy>=2.2.0",
+]
+starlette = [
+    "aiofiles>=24.1.0",
+    "starlette>=0.47.2",
+    "uvicorn[standard]>=0.35.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
